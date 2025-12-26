@@ -10,13 +10,12 @@ const protect = async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     try {
-      // Get token from header (Format: "Bearer <token>")
+      
       token = req.headers.authorization.split(' ')[1];
 
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Get user from the ID in the token
       req.user = await User.findById(decoded.id).select('-password');
 
       next(); // Move to the next step
@@ -30,7 +29,7 @@ const protect = async (req, res, next) => {
   }
 };
 
-// 👮 Check if user is Admin
+
 const admin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next(); // Allowed!

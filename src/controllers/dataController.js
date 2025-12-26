@@ -1,11 +1,10 @@
 // src/controllers/dataController.js
 const SensorData = require('../models/SensorData');
 const DeviceState = require('../models/DeviceState');
-// Check if you have weatherController created. If not, comment out the next line.
+
 const { checkRainStatus } = require('./weatherController');
 
-// @desc    Receive Data from Hardware & Run Automation
-// @route   POST /api/data/reading
+
 exports.postSensorData = async (req, res) => {
   try {
     const { soilMoisture, temperature, humidity, batteryLevel } = req.body;
@@ -25,10 +24,6 @@ exports.postSensorData = async (req, res) => {
 
     state.lastHeartbeat = Date.now();
 
-    // ------------------------------------------------------
-    // 🔋 NEW: Battery Alert Logic
-    // ------------------------------------------------------
-    // If battery is below 20%, send a specific alert event
     if (batteryLevel < 20) {
       const io = req.app.get('socketio');
       if (io) {
@@ -39,14 +34,13 @@ exports.postSensorData = async (req, res) => {
         console.log(`⚠️ Alert Sent: Low Battery (${batteryLevel}%)`);
       }
     }
-    // ------------------------------------------------------
+   
 
-    // 3. Automation Logic
     let pumpCommand = state.pumpStatus;
 
     if (state.automaticMode) {
       if (soilMoisture < state.moistureThreshold) {
-        // Check Weather (Try/Catch block in case weatherController fails)
+        
         let isRaining = false;
         try {
           if (state.weatherCheckEnabled) {
@@ -67,18 +61,18 @@ exports.postSensorData = async (req, res) => {
       }
     }
 
-    // Only update if changed
+
     if (pumpCommand !== state.pumpStatus) {
       state.pumpStatus = pumpCommand;
 
-      // Notify Frontend via Socket
+      
       const io = req.app.get('socketio');
       if (io) io.emit('pump_update', { pumpStatus: pumpCommand });
     }
 
     await state.save();
 
-    // Emit Live Data (Regular Update)
+    
     const io = req.app.get('socketio');
     if (io) {
       io.emit('new_reading', {
@@ -102,8 +96,7 @@ exports.postSensorData = async (req, res) => {
   }
 };
 
-// @desc    Get Historical Data
-// @route   GET /api/data/history
+
 exports.getHistory = async (req, res) => {
   try {
     const history = await SensorData.find().sort({ createdAt: -1 }).limit(50);

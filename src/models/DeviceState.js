@@ -6,26 +6,26 @@ const deviceStateSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      default: 'roof-system-001', // Only one system for this project
+      default: 'roof-system-001', 
     },
-    // ⚙️ Control Settings
+    
     pumpStatus: {
       type: Boolean,
-      default: false, // false = OFF, true = ON
+      default: false, 
     },
     automaticMode: {
       type: Boolean,
-      default: true, // true = System decides when to water
+      default: true, 
     },
     moistureThreshold: {
       type: Number,
-      default: 30, // Pump turns on if moisture < 30%
+      default: 30, 
     },
 
-    // 🌧️ Weather API Feature
+    
     weatherCheckEnabled: {
       type: Boolean,
-      default: true, // If true, check internet weather before watering
+      default: true, 
     },
 
     lastHeartbeat: {

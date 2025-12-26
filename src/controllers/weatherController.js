@@ -1,6 +1,5 @@
 const axios = require('axios');
 
-// Helper function: Returns TRUE if it is raining, FALSE if clear
 const checkRainStatus = async () => {
   try {
     const city = process.env.WEATHER_CITY || 'Addis Ababa';
@@ -13,14 +12,13 @@ const checkRainStatus = async () => {
 
     console.log(`🌍 Weather in ${city}: ${weatherMain}`);
 
-    // If weather is Rain, Drizzle, or Thunderstorm -> Return TRUE
     if (['Rain', 'Drizzle', 'Thunderstorm'].includes(weatherMain)) {
       return true;
     }
     return false;
   } catch (error) {
     console.error('⚠️ Weather API Error:', error.message);
-    return false; // If API fails, assume it's NOT raining (safety fallback)
+    return false; 
   }
 };
 
