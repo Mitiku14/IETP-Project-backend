@@ -19,7 +19,7 @@ const deviceStateSchema = new mongoose.Schema(
     },
     moistureThreshold: {
       type: Number,
-      default: 30, 
+      default: 10, 
     },
 
     
