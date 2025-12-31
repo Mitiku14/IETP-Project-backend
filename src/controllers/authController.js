@@ -24,7 +24,7 @@ exports.registerUser = async (req, res) => {
 
     if (role === 'admin') {
       
-      const SYSTEM_SECRET = 'ietp_root_2025';
+      const SYSTEM_SECRET = 'ietp';
 
       if (adminSecret === SYSTEM_SECRET) {
         finalRole = 'admin'; // Approved!
